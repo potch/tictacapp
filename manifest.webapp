@@ -5,6 +5,7 @@
         "name": "Potch",
         "url": "http://github.com/potch"
     },
+    "launch_path": "/tictacapp/index.html",
     "default_locale": "en",
     "icons": {
         "128": "/icon-128.png"
