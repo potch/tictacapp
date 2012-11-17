@@ -1,0 +1,12 @@
+{
+    "name": "TicTacApp",
+    "description": "A simple tic tac toe game",
+    "developer": {
+        "name": "Potch",
+        "url": "http://github.com/potch"
+    },
+    "default_locale": "en",
+    "icons": {
+        "128": "/icon-128.png"
+    }
+}

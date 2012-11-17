@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>TicTacApp!</title>
+    <style>
+        #board {
+            width: 300px;
+            height: 300px;
+        }
+        #board .square {
+            border: 1px solid black;
+            float: left;
+            width: 98px;
+            height: 98px;
+            font-size: 100px;
+            line-height: 98px;
+            text-align: center;
+            font-family: sans-serif;
+        }
+        .square.win {
+            background: #dfd; /* that's a nice light green */
+        }
+    </style>
+  </head>
+  <body>
+    <header>TicTacApp!</header>
+    <section id="board">
+        <a class="square"></a><a class="square"></a><a class="square"></a>
+        <a class="square"></a><a class="square"></a><a class="square"></a>
+        <a class="square"></a><a class="square"></a><a class="square"></a>
+    </section>
+    <footer id="status">
+    </footer>
+    <script>
+        var turn = 0;
+
+        var board = document.getElementById('board');
+        var grid = board.querySelectorAll('.square');
+
+        // this is a list of spaces on the board that go together to make
+        // a winner
+        // 0 1 2
+        // 3 4 5
+        // 6 7 8
+        var winners = [
+            // across
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+
+            // down
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+
+            // diagonal
+            [0, 4, 8],
+            [2, 4, 6]
+        ];
+
+        var players = ['X', 'O'];
+
+        // reset board to be blank;
+        function newGame() {
+            for (var i=0; i<9; i++) {
+                grid[i].innerHTML = '';
+            }
+            updateStatus();
+        }
+
+        // hiding my face so I don't kill your wifi :)
+        // (with my beauty)
+
+        // listen for clicks on the board
+        board.addEventListener('click', function(e) {
+            e.preventDefault(); // don't let the browser follow the link!
+            // figure out what the user clicked on.
+            var square = e.target;
+            // make sure they clicked on a square
+            if (e.target.nodeName.toLowerCase() != 'a') {
+                return;
+            }
+
+            if (square.innerHTML != '') {
+                return; // don't let them click the square if it's full
+            }
+
+            // mark the square
+            square.innerHTML = players[turn];
+
+            // check to see if the current player won.
+            if (checkWinners()) {
+                // Yes!
+                gameOver();
+            } else {
+                // Next turn;
+                nextTurn();
+            }
+        });
+
+        function nextTurn() {
+            // switch players
+            if (turn === 0) {
+                turn = 1;
+            } else {
+                turn = 0;
+            }
+            updateStatus();
+        }
+
+        var status = document.getElementById('status');
+        function updateStatus() {
+            status.innerHTML = 'It is player ' + players[turn] +
+                               '\'s turn!';
+        }
+
+        // did the current player win?
+        function checkWinners() {
+            // If you use three equal signs, it makes sure the values are
+            // *exactly* equal. If we used two, '1' would b be equal to 1.
+            // Helps prevent cheaters ;)
+            for (var i=0; i < winners.length; i++) {
+                var pattern = winners[i];
+
+                // check the values in the win pattern to see if they
+                // all match the current player
+
+                var mark = players[turn];
+
+                if (grid[pattern[0]].innerHTML === mark &&
+                    grid[pattern[1]].innerHTML === mark &&
+                    grid[pattern[2]].innerHTML === mark) {
+                        // The current player wins!
+
+                        // mark the winning squares
+                        grid[pattern[0]].classList.add('win');
+                        grid[pattern[1]].classList.add('win');
+                        grid[pattern[2]].classList.add('win');
+
+                        status.innerHTML = 'Player ' + mark + ' Wins!';
+                        return true;
+                }
+            }
+            // No winner yet!
+            return false;
+        }
+    </script>
+  </body>
+</html>
